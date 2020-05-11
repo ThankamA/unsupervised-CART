@@ -1,0 +1,54 @@
+---
+title: 'Statistical Data Mining: Solving Unsupervised Learning using CART'
+author: "Thankam Abish"
+date: "February 22, 2020"
+output:
+  html_document:
+    df_print: paged
+---
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
+library(ElemStatLearn)
+library(rpart)
+library(tidyr)
+library(rpart.plot)
+set.seed(123234)
+
+```
+
+### Data Preprocessing
+
+```{r}
+data(marketing)
+m1 <- marketing
+m1 <- drop_na(m1)
+m2 <- m1
+
+m1$class <- rep(1,nrow(m1))
+m2$class <- rep(0,nrow(m2))
+
+m2$Income <- sample(m2$Income, replace = TRUE)
+m2$Sex <- sample(m2$Sex, replace = TRUE)
+m2$Marital <- sample(m2$Marital, replace = TRUE)
+m2$Age <- sample(m2$Age, replace = TRUE)
+m2$Edu <- sample(m2$Edu, replace = TRUE)
+m2$Occupation <- sample(m2$Occupation, replace = TRUE)
+m2$Lived <- sample(m2$Lived, replace = TRUE)
+m2$Dual_Income <- sample(m2$Dual_Income, replace = TRUE)
+m2$Household <- sample(m2$Household, replace = TRUE)
+m2$Householdu18 <- sample(m2$Householdu18, replace = TRUE)
+m2$Status <- sample(m2$Status, replace = TRUE)
+m2$Home_Type <- sample(m2$Home_Type, replace = TRUE)
+m2$Ethnic <- sample(m2$Ethnic, replace = TRUE)
+m2$Language <- sample(m2$Language, replace = TRUE)
+```
+
+### CART model
+
+```{r}
+
+market <- rbind(m1, m2)
+model.control <- rpart.control(minsplit = 500, xval = 10, cp = 0)
+fit.market <- rpart(class~. , data = market, method = "class", control = model.control)
+x11()
+rpart.plot(fit.market)
+```
